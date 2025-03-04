@@ -1,5 +1,3 @@
-from newspaper import Article
-
 # Function to scrape Google search results
 from seleniumbase import Driver
 import time
@@ -7,6 +5,8 @@ import pandas as pd
 import streamlit as st
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
+from newspaper import Article
+
 
 def get_urls_from_google(query, publisher, num_results):
     driver = Driver(
