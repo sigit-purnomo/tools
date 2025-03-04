@@ -325,10 +325,12 @@ if __name__ == "__main__":
                 socksStr = None
             with st.spinner('Selenium is running, please wait...'):
                 performance_log, browser_log, html_content = run_selenium(logpath=logpath, proxy=st.session_state.proxy, socksStr=socksStr)
+                st.header('HTML Content')
+                st.code(body=prettify_html(html_content), language='html', line_numbers=True)
                 if html_content is None:
                     st.error('There was an error, no result found!', icon='🔥')
                 else:
-                    st.success(body=f'Result: {result}', icon='🎉')
+                    st.success(body=f'Result: {html_content}', icon='🎉')
                 st.info('Selenium log files are shown below...', icon='⬇️')
                 performance_log_msg = get_messages_from_log(performance_log)
                 if performance_log_msg is not None:
