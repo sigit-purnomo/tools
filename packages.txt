@@ -1,3 +1,2 @@
 chromium
-chromium-driver
-google-chrome-stable-120.0.6099.216-1.x86_64
+google-chrome-stable
