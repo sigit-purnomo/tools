@@ -161,15 +161,6 @@ def show_selenium_log(logpath: str):
 
 def get_urls_from_google(query, publisher, num_results):
 
-    
-    # Navigate to Google
-    driver.get("https://www.google.co.id")
-
-    wait = WebDriverWait(driver, 10)
-    search_input = wait.until(EC.presence_of_element_located((By.NAME, "q")))
-    search_input.send_keys(f"{query} site:{publisher}")
-    search_input.send_keys(Keys.RETURN)
-
     urls = []
 
     while len(urls) < num_results:
@@ -200,7 +191,13 @@ def run_selenium(logpath: str, proxy: str, socksStr: str) -> Tuple[str, List, Li
     options = get_webdriver_options(proxy=proxy, socksStr=socksStr)
     service = get_webdriver_service(logpath=logpath)
     with webdriver.Chrome(options=options, service=service) as driver:
+        url = "https://www.unibet.fr/sport/hub/euro-2024"
         try:
+            driver.get(url)
+            wait = WebDriverWait(driver, 10)
+            search_input = wait.until(EC.presence_of_element_located((By.NAME, "q")))
+            search_input.send_keys(f"{query} site:{publisher}")
+            search_input.send_keys(Keys.RETURN)
             html_content = get_urls_from_google('kawasan kotabaru yogyakarta','kompas.com',50)
         except Exception as e:
             st.error(body='Selenium Exception occured!', icon='🔥')
