@@ -10,13 +10,9 @@ from newspaper import Article
 
 from requests_html import HTMLSession
 
+
 def get_urls_from_google(query, publisher, num_results):
-    driver = Driver(
-        uc=True, 
-        headless=True, 
-        incognito=True, 
-        chromium_path="/usr/bin/chromium-browser"  # Explicitly specify Chrome
-    )
+    driver = Driver(uc=True, headless=True, incognito=True)  # Use Undetected Chrome
     driver.get("https://www.google.co.id")
 
     search_input = driver.find_element("name", "q")
