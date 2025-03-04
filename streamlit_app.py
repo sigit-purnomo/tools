@@ -192,12 +192,13 @@ def run_selenium(logpath: str, proxy: str, socksStr: str) -> Tuple[str, List, Li
     service = get_webdriver_service(logpath=logpath)
     with webdriver.Chrome(options=options, service=service) as driver:
         url = "https://www.google.co.id"
+        query='kawasan kotabaru yogyakarta'
+        publisher='kompas.com'
+        num_results=10
         try:
             driver.get(url)
             wait = WebDriverWait(driver, 10)
-            query='kawasan kotabaru yogyakarta'
-            publisher='kompas.com'
-            num_results=10
+
             search_input = wait.until(EC.presence_of_element_located((By.NAME, "q")))
             search_input.send_keys(f"{query} site:{publisher}")
             search_input.send_keys(Keys.RETURN)
@@ -208,6 +209,7 @@ def run_selenium(logpath: str, proxy: str, socksStr: str) -> Tuple[str, List, Li
                 # Find all search result links
                 wait.until(EC.presence_of_element_located((By.CLASS_NAME, "yuRUbf")))
                 result_links = driver.find_elements(By.CLASS_NAME, "yuRUbf")
+                
                 for link in result_links:
                     url = link.find_element(By.TAG_NAME, "a").get_attribute("href")
                     if url not in urls:
