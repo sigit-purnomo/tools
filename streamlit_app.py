@@ -193,7 +193,7 @@ def run_selenium(logpath: str, proxy: str, socksStr: str) -> Tuple[str, List, Li
     options = get_webdriver_options(proxy=proxy, socksStr=socksStr)
     service = get_webdriver_service(logpath=logpath)
     with webdriver.Chrome(options=options, service=service) as driver:
-        url = "https://www.unibet.fr/sport/hub/euro-2024"
+        url = "https://www.google.co.id"
         try:
             driver.get(url)
             wait = WebDriverWait(driver, 10)
