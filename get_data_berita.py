@@ -2,51 +2,42 @@ import time
 import streamlit as st
 import pandas as pd
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+from seleniumbase import Driver
 from newspaper import Article
 
 # Function to scrape Google search results
 def get_urls_from_google(query, publisher, num_results):
-    options = webdriver.ChromeOptions()
-    options.add_argument("--headless")  # Run headless
-    options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36")
-    options.add_argument("--disable-blink-features=AutomationControlled")
-    driver = webdriver.Chrome(options=options)
-    
-    # Navigate to Google
+    options = {
+        "uc": True,  # Use Undetected Chrome
+        "headless": True,
+        "incognito": True,
+    }
+    driver = Driver(uc=True, headless=True, incognito=True)  # Headless browser
     driver.get("https://www.google.co.id")
-
-    wait = WebDriverWait(driver, 10)
-    search_input = wait.until(EC.presence_of_element_located((By.NAME, "q")))
+    
+    search_input = driver.find_element("name", "q")
     search_input.send_keys(f"{query} site:{publisher}")
     search_input.send_keys(Keys.RETURN)
-
+    
     urls = []
-
     while len(urls) < num_results:
-        # Find all search result links
-        wait.until(EC.presence_of_element_located((By.CLASS_NAME, "yuRUbf")))
         result_links = driver.find_elements(By.CLASS_NAME, "yuRUbf")
-
         for link in result_links:
             url = link.find_element(By.TAG_NAME, "a").get_attribute("href")
             if url not in urls:
                 urls.append(url)
             if len(urls) >= num_results:
-                break  # Stop if enough results collected
+                break
 
-        # Check if "Next Page" button exists
         try:
             next_button = driver.find_element(By.ID, "pnnext")
             driver.execute_script("arguments[0].click();", next_button)
-            time.sleep(3)  # Allow next page to load
+            time.sleep(3)
         except:
-            break  # Exit loop if no next button
+            break
 
     driver.quit()
+    return urls
     return urls
 
 # Function to scrape articles from URLs
