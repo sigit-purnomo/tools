@@ -61,8 +61,8 @@ def scrape_articles(urls):
 st.title("🔎 Google Search & Article Scraper")
 
 # User inputs
-query = st.text_input("Enter Search Query", "selenium python")
-publisher = st.text_input("Enter Publisher (e.g., wikipedia.org)", "wikipedia.org")
+query = st.text_input("Enter Search Query", "kawasan kotabaru yogyakarta")
+publisher = st.text_input("Enter Publisher (e.g., wikipedia.org)", "kompas.com")
 num_results = st.number_input("Enter Number of Articles", min_value=1, max_value=50, value=10, step=1)
 
 if st.button("Scrape Articles"):
