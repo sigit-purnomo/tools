@@ -19,8 +19,7 @@ def get_urls_from_google(query, publisher, num_results):
     options.add_argument("--headless")  # Run headless
     options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36")
     options.add_argument("--disable-blink-features=AutomationControlled")
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()),
-                              options=options)
+    driver = webdriver.Chrome(options=options)
     
     # Navigate to Google
     driver.get("https://www.google.co.id")
