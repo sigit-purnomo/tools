@@ -196,13 +196,12 @@ def get_urls_from_google(query, publisher, num_results):
     return urls
     
 def run_selenium(logpath: str, proxy: str, socksStr: str) -> Tuple[str, List, List, str]:
-    name = None
+    
     html_content = None
     options = get_webdriver_options(proxy=proxy, socksStr=socksStr)
     service = get_webdriver_service(logpath=logpath)
     with webdriver.Chrome(options=options, service=service) as driver:
         try:
-            
             html_content = get_urls_from_google('kawasan kotabaru yogyakarta','kompas.com',50)
         except Exception as e:
             st.error(body='Selenium Exception occured!', icon='🔥')
@@ -210,7 +209,7 @@ def run_selenium(logpath: str, proxy: str, socksStr: str) -> Tuple[str, List, Li
         finally:
             performance_log = driver.get_log('performance')
             browser_log = driver.get_log('browser')
-    return name, performance_log, browser_log, html_content
+    return performance_log, browser_log, html_content
 
 
 if __name__ == "__main__":
@@ -325,8 +324,8 @@ if __name__ == "__main__":
             else:
                 socksStr = None
             with st.spinner('Selenium is running, please wait...'):
-                result, performance_log, browser_log, html_content = run_selenium(logpath=logpath, proxy=st.session_state.proxy, socksStr=socksStr)
-                if result is None:
+                performance_log, browser_log, html_content = run_selenium(logpath=logpath, proxy=st.session_state.proxy, socksStr=socksStr)
+                if html_content is None:
                     st.error('There was an error, no result found!', icon='🔥')
                 else:
                     st.success(body=f'Result: {result}', icon='🎉')
