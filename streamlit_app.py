@@ -336,7 +336,7 @@ if __name__ == "__main__":
                     st.code(body=json.dumps(performance_log_msg, indent=4), language='json', line_numbers=True)
                 st.header('Selenium Log')
                 show_selenium_log(logpath=logpath)
-                if result is None and html_content is not None:
+                if html_content is not None:
                     st.header('HTML Content')
                     st.code(body=prettify_html(html_content), language='html', line_numbers=True)
                 st.balloons()
