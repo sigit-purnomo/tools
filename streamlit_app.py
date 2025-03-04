@@ -195,7 +195,9 @@ def run_selenium(logpath: str, proxy: str, socksStr: str) -> Tuple[str, List, Li
         try:
             driver.get(url)
             wait = WebDriverWait(driver, 10)
-            
+            query='kawasan kotabaru yogyakarta'
+            publisher='kompas.com'
+            num_results=10
             search_input = wait.until(EC.presence_of_element_located((By.NAME, "q")))
             search_input.send_keys(f"{query} site:{publisher}")
             search_input.send_keys(Keys.RETURN)
@@ -221,6 +223,7 @@ def run_selenium(logpath: str, proxy: str, socksStr: str) -> Tuple[str, List, Li
                 except:
                     break  # Exit loop if no next button
             html_content = urls
+            
         except Exception as e:
             st.error(body='Selenium Exception occured!', icon='🔥')
             st.error(body=str(e), icon='🔥')
