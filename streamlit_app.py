@@ -188,7 +188,7 @@ def run_selenium(logpath: str, proxy: str, socksStr: str) -> Tuple[str, List, Li
             while len(urls) < num_results:
                 # Find all search result links
                 element = WebDriverWait(driver, 10).until(
-                                EC.presence_of_element_located((By.CSS_SELECTOR, ".yuRUbf"))
+                                EC.presence_of_element_located((By.CSS_SELECTOR, "yuRUbf"))
                             )
                 st.error(body=str(element), icon='🔥')
                 for link in result_links:
