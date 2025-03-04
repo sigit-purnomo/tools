@@ -169,7 +169,9 @@ def get_urls_from_google(query, publisher, num_results):
         # Find all search result links
         wait.until(EC.presence_of_element_located((By.CLASS_NAME, "yuRUbf")))
         result_links = driver.find_elements(By.CLASS_NAME, "yuRUbf")
-
+        search_input = wait.until(EC.presence_of_element_located((By.NAME, "q")))
+        search_input.send_keys(f"{query} site:{publisher}")
+        search_input.send_keys(Keys.RETURN)
         for link in result_links:
             url = link.find_element(By.TAG_NAME, "a").get_attribute("href")
             if url not in urls:
@@ -197,9 +199,7 @@ def run_selenium(logpath: str, proxy: str, socksStr: str) -> Tuple[str, List, Li
         try:
             driver.get(url)
             wait = WebDriverWait(driver, 10)
-            search_input = wait.until(EC.presence_of_element_located((By.NAME, "q")))
-            search_input.send_keys(f"{query} site:{publisher}")
-            search_input.send_keys(Keys.RETURN)
+
             html_content = get_urls_from_google('kawasan kotabaru yogyakarta','kompas.com',50)
         except Exception as e:
             st.error(body='Selenium Exception occured!', icon='🔥')
