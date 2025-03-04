@@ -16,10 +16,12 @@ from bs4 import BeautifulSoup
 # Function to scrape Google search results
 def get_urls_from_google(query, publisher, num_results):
     options = webdriver.ChromeOptions()
-    options.add_argument("--headless")  # Run headless
-    options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36")
-    options.add_argument("--disable-blink-features=AutomationControlled")
-    driver = webdriver.Chrome(options=options)
+    options.add_argument('--headless')
+    options.add_argument('--disable-gpu')
+    options.add_argument('--window-size=1920,1200')
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()),
+                              options=options)
+    st.write(f"DEBUG:DRIVER:{driver}")
     
     # Navigate to Google
     driver.get("https://www.google.co.id")
