@@ -8,37 +8,22 @@ from selenium.webdriver.common.by import By
 from newspaper import Article
 
 
-def get_urls_from_google(query, publisher, num_results):
-    driver = Driver(
-        uc=True, 
-        headless=True, 
-        incognito=True, 
-        chromium_path="/usr/bin/chromium-browser"  # Explicitly specify Chrome
-    )
-    driver.get("https://www.google.co.id")
+from requests_html import HTMLSession
 
-    search_input = driver.find_element("name", "q")
-    search_input.send_keys(f"{query} site:{publisher}")
-    search_input.send_keys(Keys.RETURN)
+# Function to get Google search results without Selenium
+def get_urls_from_google(query, publisher, num_results):
+    session = HTMLSession()
+    search_url = f"https://www.google.com/search?q={query}+site:{publisher}"
+    response = session.get(search_url)
 
     urls = []
-    while len(urls) < num_results:
-        result_links = driver.find_elements(By.CLASS_NAME, "yuRUbf")
-        for link in result_links:
-            url = link.find_element(By.TAG_NAME, "a").get_attribute("href")
-            if url not in urls:
-                urls.append(url)
-            if len(urls) >= num_results:
-                break
-
-        try:
-            next_button = driver.find_element(By.ID, "pnnext")
-            driver.execute_script("arguments[0].click();", next_button)
-            time.sleep(3)
-        except:
+    for link in response.html.find("a"):
+        href = link.attrs.get("href", "")
+        if "http" in href and not href.startswith("/"):
+            urls.append(href)
+        if len(urls) >= num_results:
             break
 
-    driver.quit()
     return urls
 
 # Function to scrape articles from URLs
