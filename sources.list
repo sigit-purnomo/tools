@@ -1,1 +1,1 @@
-deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main
+deb [arch=amd64] https://mirror.cs.uchicago.edu/google-chrome/pool/main/g/google-chrome-stable/
