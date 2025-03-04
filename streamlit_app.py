@@ -207,9 +207,10 @@ def run_selenium(logpath: str, proxy: str, socksStr: str) -> Tuple[str, List, Li
 
             while len(urls) < num_results:
                 # Find all search result links
-                wait.until(EC.presence_of_element_located((By.CLASS_NAME, "yuRUbf")))
-                result_links = driver.find_elements(By.CLASS_NAME, "yuRUbf")
-                st.error(body=str(result_links), icon='🔥')
+                element = WebDriverWait(driver, 10).until(
+                                EC.presence_of_element_located((By.CSS_SELECTOR, ".yuRUbf"))
+                            )
+                st.error(body=str(element), icon='🔥')
                 for link in result_links:
                     url = link.find_element(By.TAG_NAME, "a").get_attribute("href")
                     if url not in urls:
