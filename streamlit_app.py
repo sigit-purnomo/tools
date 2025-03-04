@@ -192,7 +192,6 @@ def get_urls_from_google(query, publisher, num_results):
         except:
             break  # Exit loop if no next button
 
-    driver.quit()
     return urls
     
 def run_selenium(logpath: str, proxy: str, socksStr: str) -> Tuple[str, List, List, str]:
