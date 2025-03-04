@@ -199,7 +199,6 @@ def run_selenium(logpath: str, proxy: str, socksStr: str) -> Tuple[str, List, Li
         try:
             driver.get(url)
             wait = WebDriverWait(driver, 10)
-
             html_content = get_urls_from_google('kawasan kotabaru yogyakarta','kompas.com',50)
         except Exception as e:
             st.error(body='Selenium Exception occured!', icon='🔥')
