@@ -4,6 +4,7 @@ import pandas as pd
 import streamlit as st
 from newspaper import Article
 
+from seleniumbase import Driver
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
@@ -15,13 +16,7 @@ from bs4 import BeautifulSoup
 
 # Function to scrape Google search results
 def get_urls_from_google(query, publisher, num_results):
-    options = webdriver.ChromeOptions()
-    options.add_argument('--headless')
-    options.add_argument('--disable-gpu')
-    options.add_argument('--window-size=1920,1200')
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()),
-                              options=options)
-    st.write(f"DEBUG:DRIVER:{driver}")
+    driver = Driver(uc=True, headless=True, incognito=True) 
     
     # Navigate to Google
     driver.get("https://www.google.co.id")
