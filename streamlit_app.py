@@ -159,21 +159,51 @@ def show_selenium_log(logpath: str):
     else:
         st.error('No log file found!', icon='🔥')
 
+def get_urls_from_google(query, publisher, num_results):
 
+    
+    # Navigate to Google
+    driver.get("https://www.google.co.id")
+
+    wait = WebDriverWait(driver, 10)
+    search_input = wait.until(EC.presence_of_element_located((By.NAME, "q")))
+    search_input.send_keys(f"{query} site:{publisher}")
+    search_input.send_keys(Keys.RETURN)
+
+    urls = []
+
+    while len(urls) < num_results:
+        # Find all search result links
+        wait.until(EC.presence_of_element_located((By.CLASS_NAME, "yuRUbf")))
+        result_links = driver.find_elements(By.CLASS_NAME, "yuRUbf")
+
+        for link in result_links:
+            url = link.find_element(By.TAG_NAME, "a").get_attribute("href")
+            if url not in urls:
+                urls.append(url)
+            if len(urls) >= num_results:
+                break  # Stop if enough results collected
+
+        # Check if "Next Page" button exists
+        try:
+            next_button = driver.find_element(By.ID, "pnnext")
+            driver.execute_script("arguments[0].click();", next_button)
+            time.sleep(3)  # Allow next page to load
+        except:
+            break  # Exit loop if no next button
+
+    driver.quit()
+    return urls
+    
 def run_selenium(logpath: str, proxy: str, socksStr: str) -> Tuple[str, List, List, str]:
     name = None
     html_content = None
     options = get_webdriver_options(proxy=proxy, socksStr=socksStr)
     service = get_webdriver_service(logpath=logpath)
     with webdriver.Chrome(options=options, service=service) as driver:
-        url = "https://www.unibet.fr/sport/hub/euro-2024"
         try:
-            driver.get(url)
-            time.sleep(2)
-            # Wait for the element to be rendered:
-            element = WebDriverWait(driver=driver, timeout=10).until(lambda x: x.find_elements(by=By.CSS_SELECTOR, value="h2.eventcard-content-name"))
-            name = element[0].get_property('attributes')[0]['name']
-            html_content = driver.page_source
+            
+            html_content = get_urls_from_google("kawasan kotabaru yogyakarta','kompas.com',50)
         except Exception as e:
             st.error(body='Selenium Exception occured!', icon='🔥')
             st.error(body=str(e), icon='🔥')
