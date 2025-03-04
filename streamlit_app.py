@@ -161,35 +161,15 @@ def show_selenium_log(logpath: str):
     else:
         st.error('No log file found!', icon='🔥')
 
-def get_urls_from_google(query, publisher, num_results):
-
-    urls = []
-
-    while len(urls) < num_results:
-        # Find all search result links
-
-        for link in result_links:
-            url = link.find_element(By.TAG_NAME, "a").get_attribute("href")
-            if url not in urls:
-                urls.append(url)
-            if len(urls) >= num_results:
-                break  # Stop if enough results collected
-
-        # Check if "Next Page" button exists
-        try:
-            next_button = driver.find_element(By.ID, "pnnext")
-            driver.execute_script("arguments[0].click();", next_button)
-            time.sleep(3)  # Allow next page to load
-        except:
-            break  # Exit loop if no next button
-
-    return urls
-    
+   
 def run_selenium(logpath: str, proxy: str, socksStr: str) -> Tuple[str, List, List, str]:
     
     html_content = None
     options = get_webdriver_options(proxy=proxy, socksStr=socksStr)
     service = get_webdriver_service(logpath=logpath)
+    options.add_argument("--headless")  # Run in headless mode (optional)
+    options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36")
+    options.add_argument("--disable-blink-features=AutomationControlled")
     with webdriver.Chrome(options=options, service=service) as driver:
         url = "https://www.google.co.id"
         query='kawasan kotabaru yogyakarta'
